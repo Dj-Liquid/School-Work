@@ -1,0 +1,14 @@
+C:\Users\user\Documents\Test Code\2130\Lab 3>gcc -o "X".exe "X".c
+
+C:\Users\user\Documents\Test Code\2130\Lab 3>"X"
+
+"X" being the name of the file
+
+
+For linux
+
+liquid@liquid-VirtualBox:~/Downloads/3101$ gcc -o "X".exe "X".c
+
+liquid@liquid-VirtualBox:~/Downloads/3101$ ./"X".exe
+
+"X" being the name of the file

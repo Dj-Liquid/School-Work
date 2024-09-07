@@ -1,0 +1,170 @@
+●Register User
+○ A student/lecturer should be able to create an account.
+○ A user should be able to register with a userid and password
+○ A user can be an admin, lecturer or student
+
+● User Login
+○ A student/lecturer should be able to with credentials
+
+● Create Course
+○ An admin should be able to create a course
+○ Only admins should be able to create a course
+
+● Retrieve Courses
+○ Retrieve all the courses
+○ Retrieve courses for a particular student
+○ Retrieve courses taught by a particular lecturer
+
+● Register for Course
+○ Only one lecturer can be assigned to a course
+○ Students should be able to register for a course
+
+● Retrieve Members
+○ Should return members of a particular course
+
+● Retrieve Calendar Events
+○ Should be able to retrieve all calendar events for a particular course.
+○ Should be able to retrieve all calendar events for a particular date for a particular
+student.
+
+● Create Calendar Events
+○ Should be able to create calendar event for a course
+
+● Forums
+○ Should be able to retrieve all the forums for a particular course
+○ Should be able to create a forum for a particular course
+
+● Discussion Thread
+○ Should be able to retrieve all the discussion threads for a particular forum.
+○ Should be able to add a new discussion thread to a forum. Each discussion
+thread should have a title and the post that started the thread.
+○ Users should be able to reply to a thread and replies can have replies. (Think
+reddit)
+
+● Course Content
+○ A lecturer should have the ability to add course content
+○ Course content can includes links, files, slides
+○ Course content is separated by sections.
+○ Should be able to retrieve all the course content for a particular course
+
+● Assignments
+○ A student can submit assignments for a course.
+○ A lecturer can submit a grade for a particular student for that assignment.
+○ Each grade a student gets goes to their final average.
+
+● Reports (You must also create views for the following)
+○ All courses that have 50 or more students
+○ All students that do 5 or more courses.
+○ All lecturers that teach 3 or more courses.
+○ The 10 most enrolled courses.
+○ The top 10 students with the highest overall averages.
+
+
+
+
+Endpoint: /register
+Request: POST
+Body: { "userid": "example_user", "password": "example_password", "role": "student/lecturer/admin" }
+User Login
+Endpoint: /login
+Request: POST
+Body: { "userid": "example_user", "password": "example_password" }
+Create Course
+Endpoint: /courses/create
+Request: POST
+Body: { "course_name": "Example Course", "lecturer_id": "lecturer_id", "admin_id": "admin_id" }
+Retrieve Courses
+Endpoint: /courses
+Request: GET
+Query Parameters:
+Retrieve all courses: /courses
+Retrieve courses for a particular student: /courses?student_id=student_id
+Retrieve courses taught by a particular lecturer: /courses?lecturer_id=lecturer_id
+Register for Course
+Endpoint: /courses/register
+Request: POST
+Body: { "student_id": "student_id", "course_id": "course_id" }
+Retrieve Members
+Endpoint: /courses/members
+Request: GET
+Query Parameters: /courses/members?course_id=course_id
+
+Retrieve Calendar Events
+Endpoint: /calendar/events
+Request: GET
+Query Parameters:
+Retrieve all calendar events for a particular course: /calendar/events?course_id=course_id
+Retrieve all calendar events for a particular date for a particular student: /calendar/events?student_id=student_id&date=yyyy-mm-dd
+Create Calendar Events
+Endpoint: /calendar/events/create
+Request: POST
+Body: { "course_id": "course_id", "event_name": "Event Name", "event_date": "yyyy-mm-dd" }
+
+Forums
+Endpoint: /forums
+Request: GET
+Query Parameters:
+Retrieve all forums for a particular course: /forums?course_id=course_id
+Create a forum for a particular course: POST request to /forums/create
+
+Discussion Thread
+Endpoint: /forums/discussions
+Request: GET (to retrieve all discussions for a forum)
+Request: POST (to add a new discussion thread)
+Body for POST request: { "forum_id": "forum_id", "title": "Thread Title", "post": "Thread Post" }
+
+Course Content
+Endpoint: /courses/content
+Request: GET
+Query Parameters: /courses/content?course_id=course_id
+
+Assignments
+Endpoint: /assignments
+Request: POST (to submit assignment)
+Body: { "student_id": "student_id", "course_id": "course_id", "assignment_name": "Assignment Name", "submission_date": "yyyy-mm-dd", "file": "file_url" }
+Request: PUT (to submit grade by lecturer)
+Body: { "student_id": "student_id", "course_id": "course_id", "assignment_id": "assignment_id", "grade": "grade" }
+
+Reports
+Endpoints for reports can be /reports/courses_50_students, /reports/students_5_courses, /reports/lecturers_3_courses, /reports/top_10_courses, /reports/top_10_students
+
+
+
+
+NOTES
+2. Take course_id out of section_item
+
+
+
+	
+	
+	
+	
+	
+	course_id = request.args.get('course_id')
+        
+        if course_id:
+            cursor.execute(f"SELECT student_id FROM assignedto WHERE course_id = '{course_id}'")
+        else:
+            cursor.execute('SELECT course_id FROM course')
+            course_ids = cursor.fetchall()
+            cursor.execute('SELECT student_id FROM assignedto')
+
+        student_ids = cursor.fetchall()
+        user_ids = []
+        member_names = []
+        for student in student_ids:
+            cursor.execute(f"SELECT user_id FROM student WHERE student_id = '{student[0]}'")
+            user_ids.append(cursor.fetchone())
+        for user in user_ids:
+            cursor.execute(f"SELECT username FROM user_account WHERE user_id = '{user[0]}'")
+            member_names.append(cursor.fetchone()[0])
+        
+        if course_id:
+            cursor.execute(f"SELECT course_name FROM course WHERE course_id = '{course_id}'")
+            course_name = cursor.fetchone()
+            member_names.insert(0,course_name[0])
+            
+        cursor.close()
+        conn.close()
+        return make_response(member_names, 200)

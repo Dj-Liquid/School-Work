@@ -1,0 +1,55 @@
+/*
+a variable that will be used as a pointer to a file,
+
+an array that will be used to store each of the words in the file as they are read from it
+
+an integer variable that will be used to count the number of times the word to be found appears in the file
+
+your program must first check that there are three arguments: the name of your program, a word to be found, and the file that
+ will be searched to find the word. If there is any number (of arguments) other than three it should display an appropriate 
+ error message and then exit [3 marks]
+your program must then open the file that was provided on the command line for reading, and assign the location of its first 
+memory address to the pointer you declared in part (c) above. If it is unable to open the file it should display an appropriate
+ error message and then exit [3 marks]
+
+at this point, if no errors are encountered, read each word from the file one at a time and compare it to the word that was 
+provided on the command line. Use the integer variable declared in part (c) to count and store the number of times the word 
+appears in the file, and the array you also declared in part (c) to store each of the words as they are read from the file 
+[3 marks]
+
+when all the words have been read from the file, display the total number of times the word that was to be found appeared 
+in the file. Use the standard output [1 mark]
+
+exit your program 
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void main(int argc, char* argv[])
+{
+	FILE *fpt;
+	char buffer[25];
+	int count=0;
+	
+	if(argc!=3)
+	{
+		printf("Error - Program only takes two arguments\n");
+		exit(0);
+	}
+	fpt=fopen(argv[2],"r");
+	if (fpt==NULL)
+	{
+		printf("Error - File could not be opened\n");
+		exit(0);
+	}
+	while (fscanf(fpt, "%s", buffer) == 1)
+	{
+		//fscanf(fpt,"%s",text);
+		if (strcmp(argv[1],buffer)==0)
+			count++;
+	}	
+	fclose(fpt);
+	printf("The number of times %s has been found in %s was %d time(s)\n",argv[1],argv[2],count);
+}

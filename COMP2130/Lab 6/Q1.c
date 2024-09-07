@@ -1,0 +1,16 @@
+/* Q(1) Write the Linux/Windows command(s) on one line in the shell, that will list all running
+processes only on a system and sends these directly to a file by the name
+activeProcesses.txt i.e. it will not display its result on the screen, the result will be in the
+file which will have to be viewed using an editor or shell command such as less/more.
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <Windows.h>
+
+void main ()
+{
+	system("tasklist > activeProcesses.txt");
+}
+

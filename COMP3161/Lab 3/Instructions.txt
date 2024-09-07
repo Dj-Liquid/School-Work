@@ -1,0 +1,164 @@
+You are given a dataset on shoppers (Customers.csv). A company has approached
+you to extract this data and store it in a database. You decide to create a mysql
+database. The company also has a mobile app and requires an API that can be used to
+get the data. You are required to create a script that can extract the data and to store it
+in an sql database. You are also required to create an API with the specifications
+outlined below.
+What to submit.
+1. A sql script that creates the table and inserts the data into the table. It is your job
+to figure out how to generate this script. (Your are free to the name the table
+and the database whatever you wish)
+
+2. Submit whatever script you used to generate the insert queries if one was used.
+E.g a python script.
+
+3. Flask api
+
+4. A postman collection with the following endpoints.
+
+
+a. /customers [GET]
+This should return all the customers in the following format.
+
+[
+	{
+		"CustomerID" : 1,
+		"Gender" : "Male",
+		"Age" : 19,
+		"AnnualIncome" : 15000,
+		"SpendingScore" : 20,
+		"Profession" : "Healthcare",
+		"WorkExperience" : 1,
+		"FamilySize" : 10
+	},
+	
+	{
+		"CustomerID" : 3,
+		"Gender" : "Female",
+		"Age" : 20,
+		"AnnualIncome" : 15000,
+		"SpendingScore" : 20,
+		"Profession" : "Healthcare",
+		"WorkExperience" : 1,
+		"FamilySize" : 5
+	}
+]
+
+b. /customer/<customer_id> [GET]
+This should return a shopper with the specified id. If no shopper is found
+an appropriate error message should be returned.
+
+	{
+		"CustomerID" : 1,
+		"Gender" : "Male",
+		"Age" : 19,
+		"AnnualIncome" : 15000,
+		"SpendingScore" : 20,
+		"Profession" : "Healthcare",
+		"WorkExperience" : 1,
+		"FamilySize" : 10
+	}
+
+c. /add_customer [POST]
+This should allow a shopper to be added to the database. The endpoint
+should accept a body in the following format. An appropriate success
+message should be returned.
+
+	{
+		"CustomerID" : 1,
+		"Gender" : "Male",
+		"Age" : 19,
+		"AnnualIncome" : 15000,
+		"SpendingScore" : 20,
+		"Profession" : "Healthcare",
+		"WorkExperience" : 1,
+		"FamilySize" : 10
+	}
+
+d. /update_profession/<customer_id> [PUT]
+This should allow a customer’s profession to be added with the specified
+customer id. The endpoint should accept a body with the following format.
+An appropriate success message should be shown.
+
+	{
+		"AnnualIncome": 15000
+	}
+
+
+e. /highest_income_report [GET]
+This should return a report with the highest income earners by profession.
+
+[
+	{
+		"CustomerID": 3,
+		"AnnualIncome": 100000,
+		"Profession": "Healthcare"
+	},
+	{
+		"CustomerID": 10,
+		"AnnualIncome": 40000,
+		"Profession": "Executive"
+	},
+	{
+		"CustomerID": 5,
+		"AnnualIncome": 20000,
+		"Profession": "Lawyer"
+	}
+]
+
+
+f. /total_income_report [GET]
+This should show the total income earned by profession.
+
+[
+	{
+		"TotalIncome": 100000,
+		"Profession": "Healthcare"
+	},
+	{
+		"TotalIncome": 503030000,
+		"Profession": "Executive"
+	},
+	{
+		"TotalIncome": 1300404000,
+		"Profession": "Lawyer"
+	}
+]
+
+
+g. /average_work_experience [GET]
+This should show the average work experience by profession for
+customers that are young high earners. A young high earner is one which
+makes over $50,000 and is younger than 35 years old.
+
+[
+	{
+		"AverageExperience": 4,
+		"Profession": "Healthcare"
+	},
+	{
+		"AverageExperience": 2,
+		"Profession": "Executive"
+	},
+	{
+		"AverageExperience": 5,
+		"Profession": "Lawyer"
+	}
+]
+
+
+h. /average_spending_score/<profession> [GET]
+This should show the average spending score by gender for the profession
+specified. E.g. /average_spending_score/engineers would return the average
+spending score by gender for engineers. Output should look as follows
+
+[
+	{
+		"Gender": "Male",
+		"AverageSpendingScore": 20
+	},
+	{
+		"Gender": "Female",
+		"AverageSpendingScore": 30
+	}
+]
